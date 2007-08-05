@@ -10,6 +10,16 @@ WTForm was built with the well-documented YUI Grid CSS[1] in
 mind when rendering the columns and fields. This should make
 it easy to implement WTForm in your own applications.
 
+Revision history
+----------------
+
+0.1 (May 2007) - Initial release
+
+0.2 (August 2007) - Bugfix release
+
+  WTForm now works with form_for_model and form_for_instance
+  (see "Using forms_for_model and form_for_instance" for details)
+
 Specifying the form layout
 --------------------------
 
@@ -189,10 +199,40 @@ required - it will also get a Required.
 Data handling / newforms compability:
 -------------------------------------
 
-WTForm descends from newforms.Form, thus data handling is
+WTForm descends from newforms.BaseForm, thus data handling is
 done the same way: is_valid(), clean_data...
 
 Refer to the newforms documentation[2] for details.
+
+Using forms_for_model and form_for_instance
+-------------------------------------------
+
+When using form_for_model, you only need to define the layout
+of the form. Here is an example from our Intranet application:
+
+  from django import newforms as forms
+  from intranet.timesheet.models import TimeEntry
+  from wtform import WTForm, Fieldset
+
+  class TimeEntryFormBase(WTForm):
+    
+      class Meta:
+          
+          layout = (Fieldset('Elements',
+                             'employee', 'date', 'project',
+                             'description', 'tickets'),)
+
+  TimeEntryForm = forms.form_for_model(TimeEntry,
+                                       form=TimeEntryFormBase)
+
+As well as:
+
+  TimeEntryForm = forms.form_for_instance(entry,
+                                          form=TimeEntryFormBase)
+
+Again, for details about form_for_model and form_for_instance,
+you should refer to the newforms documentation[2] at the django
+website.
 
 Credits:
 --------
@@ -225,7 +265,7 @@ References:
 
 from django.newforms.forms import BoundField
 from django.utils.html import escape
-from django.newforms import Form
+from django.newforms import BaseForm
 
 class NoSuchFormField(Exception):
     "The form field couldn't be resolved."
@@ -236,7 +276,7 @@ def error_list(errors):
            '</li><li>'.join(errors) + \
            '</li></ul>'
 
-class WTForm(Form):
+class WTForm(BaseForm):
 
     def __init__(self, data=None, auto_id='id_%s', prefix=None, initial=None):
 
