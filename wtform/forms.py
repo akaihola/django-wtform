@@ -1,271 +1,12 @@
-'''
-WTForm (What The Form)
-======================
-
-WTForm is an extension to the django newforms library allowing
-the developer, in a very flexible way, to layout the form
-fields using <fieldset>s and columns
-
-WTForm was built with the well-documented YUI Grid CSS[1] in
-mind when rendering the columns and fields. This should make
-it easy to implement WTForm in your own applications.
-
-Revision history
-----------------
-
-0.1 (May 2007) - Initial release
-
-0.2 (August 2007) - Bugfix release
-
-  WTForm now works with form_for_model and form_for_instance
-  (see "Using forms_for_model and form_for_instance" for details)
-
-Specifying the form layout
---------------------------
-
-WTForm will look for a subclass of your form called "Meta". This
-class should have a tuple variable called layout . The layout
-variable will hold a tree structure of fields, field sets and
-columns.
-
-Here is a simple example:
-
-  class MyForm(WTForm):
-
-      name = forms.CharField(label="Name")
-      email = forms.EmailField(label="E-mail address")
-
-      class Meta:
-
-          layout = (Columns(("name",), ("email",)),)
-
-This will result in the form layout of:
-
-  +--------------------------+--------------------------+
-  | Name                     | E-mail address           |
-  | [______________________] | [______________________] |
-  +--------------------------+--------------------------+
-
-WTForm currently uses four types of nodes (fields):
-
-  - Fieldset(legend, field[, field])
-
-    Represents a HTML <fieldset> with the fields specified
-    by the arguments as contents. The first argument will
-    be the content of the <legend> HTML node. If the legend
-    argument is the empty string, the <legend> HTML node
-    will not be rendered.
-  
-  - Columns(column[, column] [, css_class="foobar"])
-
-    Represents a column grid. The columns are specified as
-    tuples of fields. In order to obtain different grid
-    sizes, the Columns function takes an optional keyword
-    argument called css_class which will be rendered as the
-    class of the outer-most <div> of the grid layout.
-
-    See the YUI Grid CSS specification[1] for details on
-    possible values for css_class. Also, see the
-    "Columns CSS styling" part of this documentation.
-
-    Even if you only have one field per column, remember
-    to pass a tuple to the Columns function:
-
-      Columns(("field1",), ("field2",))
-  
-  - HTML(content)
-
-    Represents HTML content. This is useful for embedding
-    HTML pieces in between fields for documentation. This
-    type of node has no children.
-
-  - "name"
-
-    A string represents a single field. The field must be
-    defined in your form. If the field could not be
-    resolved, the NoSuchFormField exception will be raised.
-
-Columns and Fieldset nodes can be nested as deep as you
-want (just as long as you dont get in a fight with your web
-designer).
-
-More examples:
---------------
-
-If you need to add two individuals in your form, you could put
-them in field sets:
-
-  class MyForm(WTForm):
-
-      name1 = forms.CharField(label="Name (1)")
-      email1 = forms.EmailField(label="E-mail address (1)")
-
-      name2 = forms.CharField(label="Name (2)")
-      email2 = forms.EmailField(label="E-mail address (2)")
-
-      class Meta:
-
-          layout = (Fieldset("Person 1",
-                             Columns(("name1",), ("email1",))),
-                    Fieldset("Person 2",
-                             Columns(("name2",), ("email2",))))
-
-This will result in the form layout of:
-
-  +-[ Person 1 ]----------------------------------------+
-  |+-------------------------+-------------------------+|
-  || Name (1)                | E-mail address (1)      ||
-  || [_____________________] | [_____________________] ||
-  |+-------------------------+-------------------------+|
-  +-----------------------------------------------------+
-
-  +-[ Person 2 ]----------------------------------------+
-  |+-------------------------+-------------------------+|
-  || Name (2)                | E-mail address (2)      ||
-  || [_____________________] | [_____________________] ||
-  |+-------------------------+-------------------------+|
-  +-----------------------------------------------------+
-
-Say you would like one big field set with the charfields in
-two columns:
-
-  class MyForm(WTForm):
-
-      name1 = forms.CharField(label="Name (1)")
-      email1 = forms.EmailField(label="E-mail address (1)")
-
-      name2 = forms.CharField(label="Name (2)")
-      email2 = forms.EmailField(label="E-mail address (2)")
-
-      class Meta:
-
-          layout = (Fieldset("Person details",
-                             Columns(("name1", "name2"),
-                                     ("email1", "email2"))),)
-
-This will result in the form layout of:
-
-  +-[ Person details ]----------------------------------+
-  |+-------------------------+-------------------------+|
-  || Name (1)                | E-mail address (1)      ||
-  || [_____________________] | [_____________________] ||
-  ||                         |                         ||
-  || Name (2)                | E-mail address (2)      ||
-  || [_____________________] | [_____________________] ||
-  |+-------------------------+-------------------------+|
-  +-----------------------------------------------------+
-
-Columns CSS styling:
---------------------
-
-The Column HTML is written with the intent of working with
-the YUI CSS for grids. When using Columns you can specify
-the CSS class of the outer <div> by supplying the keyword
-argument css_class:
-
-  Columns(field1, field2, field3, css_class="yui-gc")
-
-This will create a 2/3 - 1/3 grid with two columns. Read
-more about YUI Grids CSS:
-
-  http://developer.yahoo.com/yui/grids/
-
-Differences from newforms / HTML structure of fields:
------------------------------------------------------
-
-In order to make CSS styling a lot easier, WTForm til raise
-NotImplemented on as_table, as_p and as_ul. When rendering
-WTForm forms you must use as_div, as we believe that this
-is the way to structure your forms.
-
-A field will be rendered as:
-
-  <div class="CharField TextInput">
-    <label for="id_name">Name</label>
-    <span class="help_text">Very helpful text</span>
-    <ul class="errors">
-      <li>Error 1</li>
-      <li>Error 2</li>
-    </ul>
-    <div class="field">
-      <input type="text" name="name" value="" id="id_name" />
-    </div>
-  </div>    
-    
-The CSS classes in the outer <div> is fetched from the field
-type as well as the widget type. If the field is marked as
-required - it will also get a Required.
-
-Data handling / newforms compability:
--------------------------------------
-
-WTForm descends from newforms.BaseForm, thus data handling is
-done the same way: is_valid(), clean_data...
-
-Refer to the newforms documentation[2] for details.
-
-Using forms_for_model and form_for_instance
--------------------------------------------
-
-When using form_for_model, you only need to define the layout
-of the form. Here is an example from our Intranet application:
-
-  from django import newforms as forms
-  from intranet.timesheet.models import TimeEntry
-  from wtform import WTForm, Fieldset
-
-  class TimeEntryFormBase(WTForm):
-    
-      class Meta:
-          
-          layout = (Fieldset('Elements',
-                             'employee', 'date', 'project',
-                             'description', 'tickets'),)
-
-  TimeEntryForm = forms.form_for_model(TimeEntry,
-                                       form=TimeEntryFormBase)
-
-As well as:
-
-  TimeEntryForm = forms.form_for_instance(entry,
-                                          form=TimeEntryFormBase)
-
-Again, for details about form_for_model and form_for_instance,
-you should refer to the newforms documentation[2] at the django
-website.
-
-Credits:
---------
-
-Christian Joergensen <christian.joergensen [at] gmta.info>
-Oscar Eg Gensmann <oscar.gensmann [at] gmta.info>
-
-Founded in 2003, GMTA ApS is the partnership between three
-danish computer enthusiasts with a strong interest in the
-web-phenomenon.
-
-Visit our website: http://www.gmta.info
-
-License:
---------
-
-Creative Commons Attribution-Share Alike 3.0 License
-http://creativecommons.org/licenses/by-sa/3.0/
-
-When attributing this work, you must maintain the Credits
-paragraph above.
-
-References:
------------
-
- [1] http://developer.yahoo.com/yui/grids/
- [2] http://www.djangoproject.com/documentation/newforms/
-
-'''
+import copy
 
 from django.newforms.forms import BoundField
 from django.utils.html import escape
+from django.utils.datastructures import SortedDict
 from django.newforms import BaseForm
+from django.newforms.fields import Field
+
+__all__ = ('WTForm', 'BaseWTForm', 'Fieldset', 'Columns', 'HTML', 'NoSuchFormField')
 
 class NoSuchFormField(Exception):
     "The form field couldn't be resolved."
@@ -276,15 +17,47 @@ def error_list(errors):
            '</li><li>'.join(errors) + \
            '</li></ul>'
 
-class WTForm(BaseForm):
+class SortedDictFromList(SortedDict):
+    "A dictionary that keeps its keys in the order in which they're inserted."
+    # This is different than django.utils.datastructures.SortedDict, because
+    # this takes a list/tuple as the argument to __init__().
+    def __init__(self, data=None):
+        if data is None: data = []
+        self.keyOrder = [d[0] for d in data]
+        dict.__init__(self, dict(data))
 
-    def __init__(self, data=None, auto_id='id_%s', prefix=None, initial=None):
+    def copy(self):
+        return SortedDictFromList([(k, copy.copy(v)) for k, v in self.items()])
 
-        super(WTForm, self).__init__(data, auto_id, prefix, initial)
+class DeclarativeFieldsMetaclass(type):
+    """
+    Metaclass that converts Field attributes to a dictionary called
+    'base_fields', taking into account parent class 'base_fields' as well.
+    """
+    def __new__(cls, name, bases, attrs):
+        fields = [(field_name, attrs.pop(field_name)) for field_name, obj in attrs.items() if isinstance(obj, Field)]
+        fields.sort(lambda x, y: cmp(x[1].creation_counter, y[1].creation_counter))
+
+        # If this class is subclassing another Form, add that Form's fields.
+        # Note that we loop over the bases in *reverse*. This is necessary in
+        # order to preserve the correct order of fields.
+        for base in bases[::-1]:
+            if hasattr(base, 'base_fields'):
+                fields = base.base_fields.items() + fields
+
+        attrs['base_fields'] = SortedDictFromList(fields)
+        return type.__new__(cls, name, bases, attrs)
+
+class BaseWTForm(BaseForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super(BaseWTForm, self).__init__(*args, **kwargs)
 
         # do we have an explicit layout?
         
         if hasattr(self, 'Meta') and hasattr(self.Meta, 'layout'):
+            assert hasattr(self.Meta.layout, '__getitem__'), "Meta.layout must be iterable"
             self.layout = self.Meta.layout
         else:
             # Construct a simple layout using the keys from the fields
@@ -306,7 +79,15 @@ class WTForm(BaseForm):
 
         ''' Render the form as a set of <div>s. '''
 
+        self.rendered_fields = []
+
         output = self.render_fields(self.layout)
+
+        # render missing fields from layout
+        
+        output += self.render_fields([field for field in self.fields.keys()
+                                      if field not in self.rendered_fields])
+
         prefix = u''.join(self.prefix)
 
         if self.top_errors:
@@ -335,6 +116,7 @@ class WTForm(BaseForm):
             if isinstance(field, (Columns, Fieldset, HTML)):
                 output.append(field.as_html(self))
             else:
+                self.rendered_fields.append(field)
                 output.append(self.render_field(field))
 
         return separator.join(output)
@@ -407,6 +189,9 @@ class WTForm(BaseForm):
 
         return output
 
+class WTForm(BaseWTForm):
+    __metaclass__ = DeclarativeFieldsMetaclass
+
 class Fieldset(object):
 
     ''' Fieldset container. Renders to a <fieldset>. '''
@@ -452,3 +237,4 @@ class HTML(object):
 
     def as_html(self, form):
         return self.html
+

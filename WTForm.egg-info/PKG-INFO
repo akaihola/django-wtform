@@ -1,0 +1,19 @@
+Metadata-Version: 1.0
+Name: WTForm
+Version: 1.0
+Summary: WTForm is an extension to the django newforms library.
+Home-page: UNKNOWN
+Author: Christian Joergensen
+Author-email: christian.joergensen@gmta.info
+License: http://creativecommons.org/licenses/by-sa/3.0/
+Description: WTForm is an extension to the django newforms library allowing the developer, in a very flexible way, to layout the form fields using fieldsets and columns
+Keywords: django newforms forms yui
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: License :: Freely Distributable
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content :: CGI Tools/Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
