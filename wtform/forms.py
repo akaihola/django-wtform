@@ -1,10 +1,10 @@
 import copy
 
-from django.newforms.forms import BoundField
+from django.forms.forms import BoundField
 from django.utils.html import escape
 from django.utils.datastructures import SortedDict
-from django.newforms import BaseForm
-from django.newforms.fields import Field
+from django.forms import BaseForm
+from django.forms.fields import Field
 
 __all__ = ('WTForm', 'BaseWTForm', 'Fieldset', 'Columns', 'HTML', 'NoSuchFormField')
 
