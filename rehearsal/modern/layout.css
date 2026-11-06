@@ -1,0 +1,3 @@
+/* Replaces the YUI grid classes yui-g (two equal columns) and yui-gc (2/3 + 1/3). */
+.columns { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2%; }
+.columns.wide-narrow { grid-template-columns: 2fr 1fr; }

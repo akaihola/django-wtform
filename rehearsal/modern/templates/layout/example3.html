@@ -1,0 +1,8 @@
+{% include "layout/top.html" %}
+<fieldset>
+  <legend>Person details</legend>
+  <div class="columns">
+    <div>{{ form.name1.as_field_group }}{{ form.name2.as_field_group }}</div>
+    <div>{{ form.email1.as_field_group }}{{ form.email2.as_field_group }}</div>
+  </div>
+</fieldset>

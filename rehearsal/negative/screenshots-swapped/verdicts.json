@@ -1,0 +1,23 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "verdicts": {
+  "example2 unbound": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": false,
+   "same_layout": false,
+   "same_content": true,
+   "differences": [
+    "In the 'Person 2' fieldset of the new form, the 'E-mail address (2)' and 'Name (2)' fields have swapped places compared to the old form."
+   ]
+  },
+  "example2 errors": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": false,
+   "same_layout": false,
+   "same_content": true,
+   "differences": [
+    "In Person 2, the Name and E-mail address fields have swapped columns in the new image."
+   ]
+  }
+ }
+}

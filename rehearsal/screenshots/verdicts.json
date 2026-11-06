@@ -1,0 +1,63 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "verdicts": {
+  "example1 unbound": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example1 errors": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example2 unbound": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example2 errors": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example3 unbound": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example3 errors": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example4 unbound": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": true,
+   "differences": []
+  },
+  "example4 errors": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": true,
+   "same_layout": true,
+   "same_content": false,
+   "differences": [
+    "The new form has an additional error message at the top: 'Please write more than \"Hi\".'"
+   ]
+  }
+ }
+}

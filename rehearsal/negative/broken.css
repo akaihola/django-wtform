@@ -1,0 +1,2 @@
+/* Deliberately broken: the columns are stacked instead of side by side. */
+.columns { display: block; }

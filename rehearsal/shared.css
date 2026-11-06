@@ -1,0 +1,11 @@
+/* Field styling shared by the old and the new screenshots. */
+body { font: 14px/1.4 sans-serif; margin: 16px; width: 680px; text-align: left; }
+fieldset { border: 1px solid #888; margin: 0 0 12px; padding: 6px 10px; }
+legend { font-weight: bold; padding: 0 4px; }
+.field { margin: 0 0 10px; }
+.field label { display: block; }
+.Required label, .required label { font-weight: bold; }
+.help_text { display: block; font-size: 12px; color: #555; }
+ul.errors { color: #b00; margin: 2px 0; padding-left: 18px; }
+.input input:not([type=checkbox]), .input textarea { box-sizing: border-box; width: 100%; }
+.note { font-style: italic; }

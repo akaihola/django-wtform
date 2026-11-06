@@ -1,0 +1,6 @@
+<div class="field{% if field.css_classes %} {{ field.css_classes }}{% endif %}">
+{% if field.label %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+{% if field.help_text %}<span class="help_text" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</span>{% endif %}
+{% if field.errors %}<ul class="errors" id="{{ field.auto_id }}_error">{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+<div class="input">{{ field }}</div>
+</div>

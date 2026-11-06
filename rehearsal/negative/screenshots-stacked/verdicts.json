@@ -1,0 +1,24 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "verdicts": {
+  "example3 unbound": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": false,
+   "same_layout": false,
+   "same_content": true,
+   "differences": [
+    "Image 1 arranges the fields in two columns as shown in the drawing, while image 2 places all fields in a single column."
+   ]
+  },
+  "example3 errors": {
+   "old_matches_drawing": true,
+   "new_matches_drawing": false,
+   "same_layout": false,
+   "same_content": true,
+   "differences": [
+    "Image 1 displays the fields in two columns, whereas image 2 displays them in a single vertical column.",
+    "The error message for the first email field spells it 'e-mail' in image 1 and 'email' in image 2."
+   ]
+  }
+ }
+}
