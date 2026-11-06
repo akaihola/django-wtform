@@ -63,7 +63,7 @@ class BaseWTForm(BaseForm):
             # Construct a simple layout using the keys from the fields
             self.layout = self.fields.keys()
 
-        self.prefix = []
+        self.hidden_fields_html = []
         self.top_errors = []
 
     def as_table(self):
@@ -88,17 +88,17 @@ class BaseWTForm(BaseForm):
         output += self.render_fields([field for field in self.fields.keys()
                                       if field not in self.rendered_fields])
 
-        prefix = u''.join(self.prefix)
+        hidden_fields_html = u''.join(self.hidden_fields_html)
 
         if self.top_errors:
             errors = error_list(self.top_errors)
         else:
             errors = u''
 
-        self.prefix = []
+        self.hidden_fields_html = []
         self.top_errors = []
 
-        return prefix + errors + output
+        return hidden_fields_html + errors + output
 
     # Default output is now as <div> tags.
     
@@ -147,7 +147,7 @@ class BaseWTForm(BaseForm):
 
             # If the field is hidden, add it at the top of the form
 
-            self.prefix.append(unicode(bf))
+            self.hidden_fields_html.append(unicode(bf))
 
             # If the hidden field has errors, append them to the top_errors
             # list which will be printed out at the top of form
