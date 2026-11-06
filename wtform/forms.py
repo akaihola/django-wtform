@@ -153,7 +153,7 @@ class BaseWTForm(BaseForm):
             # list which will be printed out at the top of form
             
             if bf_errors:
-                self.top_errors.extend(bf.errors)
+                self.top_errors.extend([escape(error) for error in bf.errors])
 
         else:
 
