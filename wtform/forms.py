@@ -1,6 +1,7 @@
 import copy
 
 from django.forms.forms import BoundField
+from django.utils.encoding import force_unicode
 from django.utils.html import escape
 from django.utils.datastructures import SortedDict
 from django.forms import BaseForm
@@ -14,7 +15,7 @@ class NoSuchFormField(Exception):
 
 def error_list(errors):
     return '<ul class="errors"><li>' + \
-           '</li><li>'.join(errors) + \
+           '</li><li>'.join([force_unicode(error) for error in errors]) + \
            '</li></ul>'
 
 class SortedDictFromList(SortedDict):
